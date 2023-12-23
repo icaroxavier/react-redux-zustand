@@ -1,6 +1,9 @@
 import { ChevronDown } from "lucide-react";
 import { Lesson } from "./Lesson";
 import * as Collapsible from '@radix-ui/react-collapsible';
+import { useAppSelector } from "../store";
+import { playerActions } from "../store/slices/player";
+import { useDispatch } from "react-redux";
 
 type ModuleProps = {
     title: string;
@@ -9,8 +12,22 @@ type ModuleProps = {
 }
 
 export function Module({ title, amountOfLessons, moduleIndex }: ModuleProps) {
+    const lessons = useAppSelector(state => state.player.course.modules[moduleIndex].lessons)
+    const { currentModuleIndex, currentLessonIndex } = useAppSelector(state => ({
+        currentModuleIndex: state.player.currentModuleIndex,
+        currentLessonIndex: state.player.currentLessonIndex
+    }))
+    const dispatch = useDispatch()
+
+    function handlePlayLesson(lessonIndex: number) {
+        dispatch(playerActions.play({
+            lessonIndex,
+            moduleIndex
+        }))
+    }
+
     return (
-        <Collapsible.Root className="group">
+        <Collapsible.Root className="group" defaultOpen={moduleIndex === 0}>
             <Collapsible.Trigger className="flex w-full items-center gap-3 bg-zinc-800 p-4">
                 <div className="flex h-10 w-10 rounded-full items-center justify-center bg-zinc-950 text-xs">
                     {moduleIndex + 1}
@@ -23,10 +40,15 @@ export function Module({ title, amountOfLessons, moduleIndex }: ModuleProps) {
             </Collapsible.Trigger>
             <Collapsible.Content>
                 <nav className="relative flex flex-col gap-4 p-6">
-                    <Lesson title="Fundamentos" duration="11:11"/>
-                    <Lesson title="Fundamentos" duration="11:11"/>
-                    <Lesson title="Fundamentos" duration="11:11"/>
-                    <Lesson title="Fundamentos" duration="11:11"/>
+                    {lessons.map((lesson, lessonIndex)=> (
+                        <Lesson 
+                            key={lesson.id} 
+                            title={lesson.title} 
+                            duration={lesson.duration} 
+                            onPlay={() => handlePlayLesson(lessonIndex)} 
+                            isActive={moduleIndex=== currentModuleIndex && lessonIndex === currentLessonIndex} 
+                        />
+                    ))}
                 </nav>
             </Collapsible.Content>
             
