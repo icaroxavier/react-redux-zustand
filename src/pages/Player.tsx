@@ -2,17 +2,19 @@ import { MessageCircle } from "lucide-react";
 import { Header } from "../components/Header";
 import { Video } from "../components/Video";
 import { Module } from "../components/Module";
-import { useAppSelector } from "../store";
-import { playerActions, useCurrentLesson } from "../store/slices/player";
+import { useAppDispatch, useAppSelector } from "../store";
+import { loadCourse, useCurrentLesson } from "../store/slices/player";
 import { useEffect } from "react";
-import { api } from "../lib/axios";
-import { useDispatch } from "react-redux";
 
 export function Player() {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const modules = useAppSelector(state => state.player.course?.modules) || []
 
     const currentLesson = useCurrentLesson()
+
+    useEffect(() => {
+        dispatch(loadCourse())
+    }, [])
 
     useEffect(() => {
         if (currentLesson) {
@@ -20,11 +22,7 @@ export function Player() {
         }
     }, [currentLesson])
 
-    useEffect(() => {
-        api.get('/courses/1').then((response) => {
-            dispatch(playerActions.start(response.data))
-        })
-    }, [])
+  
 
     return (<div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
         <div className="flex w-[1100px] flex-col gap-6">
