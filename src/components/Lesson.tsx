@@ -8,8 +8,6 @@ type LessonProps = {
 }
 
 export function Lesson({ title, duration, onPlay, isActive = false }: LessonProps) {
-   
-
     return (
         <button disabled={isActive} className="flex items-center gap-3 text-sm text-zinc-400 data-[active=true]:text-emerald-400 enabled:hover:text-zinc-100" onClick={onPlay} data-active={isActive}>
             {isActive ? <PlayCircle className="w-4 h-4 text-emerald-400"/> : <Video className="w-4 h-4 text-zinc-500"/>}
