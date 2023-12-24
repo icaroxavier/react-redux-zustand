@@ -3,11 +3,14 @@ import { Header } from "../components/Header";
 import { Video } from "../components/Video";
 import { Module } from "../components/Module";
 import { useAppSelector } from "../store";
-import { useCurrentLesson } from "../store/slices/player";
+import { playerActions, useCurrentLesson } from "../store/slices/player";
 import { useEffect } from "react";
+import { api } from "../lib/axios";
+import { useDispatch } from "react-redux";
 
 export function Player() {
-    const modules = useAppSelector(state => state.player.course.modules)
+    const dispatch = useDispatch()
+    const modules = useAppSelector(state => state.player.course?.modules) || []
 
     const currentLesson = useCurrentLesson()
 
@@ -16,6 +19,12 @@ export function Player() {
             document.title = `Assistindo ${currentLesson.title}`
         }
     }, [currentLesson])
+
+    useEffect(() => {
+        api.get('/courses/1').then((response) => {
+            dispatch(playerActions.start(response.data))
+        })
+    }, [])
 
     return (<div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
         <div className="flex w-[1100px] flex-col gap-6">

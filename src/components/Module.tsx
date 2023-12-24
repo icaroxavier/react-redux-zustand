@@ -12,7 +12,7 @@ type ModuleProps = {
 }
 
 export function Module({ title, amountOfLessons, moduleIndex }: ModuleProps) {
-    const lessons = useAppSelector(state => state.player.course.modules[moduleIndex].lessons)
+    const lessons = useAppSelector(state => state.player.course?.modules[moduleIndex].lessons) || []
     const { currentModuleIndex, currentLessonIndex } = useCurrentIndexes()
     const dispatch = useDispatch()
 

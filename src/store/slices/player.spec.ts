@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { playerActions, playerReducer, playerSlice } from './player'
+import { PlayerState, playerActions, playerReducer } from './player'
 
 const exampleState = {
     course: {
         modules: [
             {
-              id: '1',
+              id: 1,
               title: 'Iniciando com React',
               lessons: [
                 { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
@@ -14,7 +14,7 @@ const exampleState = {
               ],
             },
             {
-              id: '2',
+              id: 2,
               title: 'Estrutura da aplicação',
               lessons: [
                 { id: 'gE48FQXRZ_o', title: 'Componente: Comment', duration: '13:45' },
@@ -26,7 +26,7 @@ const exampleState = {
     },
     currentModuleIndex: 0,
     currentLessonIndex: 0,
-}
+} as PlayerState
 
 describe('player slice', () => {
     
